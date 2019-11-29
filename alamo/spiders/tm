@@ -1,0 +1,94 @@
+import scrapy
+import urllib
+import json
+from alamo.items import AlamoItem
+import datetime
+import time
+import pdb
+
+class Alamocar(scrapy.Spider):
+    name = "alamo_cars"
+
+    def start_requests(self):
+        # for x in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H','I', 'J','K', 'L', 'M', 'N', 'O', 'P', 'Q','R','S','T','U', 'V', 'W', 'X', 'Y', 'Z', '1']:
+
+        url = "https://www.alamo.com/content/data/apis/live/reservation/start/submit.sfx.json/channelName%3Dalamo/locale%3Den_US.json"
+        headers = {
+            "accept": "*/*",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            # "cookie": """ORIGIN=ptc; akacd_www_alamo_com_PC=3740283238~rv=33~id=fb83c74ffff546edcc591c8373ff1a84; Akamai-Edgescape=georegion=39,country_code=KH,region_code=,city=PHNOMPENH,dma=,pmsa=,msa=,areacode=,county=,fips=,lat=11.55,long=104.92,timezone=GMT+7,zip=,continent=AS,throughput=vhigh,bw=5000,asnum=38901; check=true; Rental-alamo_com=!7wqfXwoFoK2Usk+obXePO4Msbo9tExn89fgBHG4wH4BKD6qUaxxkb5NW4t08oyIv1quFz2bGI041ZQ==; TLTSID=3E4C90CFDD63FF5DCE1DB6872F611BF8; TLTUID=71449B9059575CF5AEBA267FB2414170; geo=KH; AMCVS_30545A0C536B768C0A490D44%40AdobeOrg=1; loc=US%7Cen_US%7C%7C; _sdsat_FUNNEL_START=HOME; s_cc=true; _gcl_au=1.1.204630551.1562830451; notice_behavior=none; _ga=GA1.2.800946818.1562830451; seerid=120285.73332530419; seerid=120285.73332530419; ki_r=; _CT_RS_=Recording; WRUIDAWS20170419=2338980782129529; _fbp=fb.1.1562830461218.915130958; _resDrop=SFOC78; AMCV_30545A0C536B768C0A490D44%40AdobeOrg=-330454231%7CMCIDTS%7C18091%7CMCMID%7C90411171841614233213393773031316547261%7CMCAAMLH-1563609379%7C6%7CMCAAMB-1563609379%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1563011779s%7CNONE%7CMCAID%7CNONE%7CvVersion%7C3.1.2; _gid=GA1.2.500318964.1563004583; _pickUpDate=2019-07-15 12:00:00; _dropOffDate=2019-07-17 12:00:00; res=1019124%7CSan+Francisco+Union+Square%7C1563217200000%7CAmerica%2FLos_Angeles%7C1019124%7CSan+Francisco+Union+Square%7C1563390000000%7CAmerica%2FLos_Angeles%7CUS%7C%7C%7C25%7C; seerses=e; seerses=e; mboxEdgeCluster=28; JSESSIONID=nr3hncc50d4ecbplol0rswv9; mbox=PC#c59d3f519bd44d9c83955102e7b26060.28_35#1626254461|session#9785c6b6dbb440519b7727002f3d606f#1563012644; ly_segs=%7B%22alamo_abandon_cart_onsite_modals%22%3A%22alamo_abandon_cart_onsite_modals%22%2C%22treatment_group%22%3A%22treatment_group%22%2C%22ly_alamo_abandon_cart%22%3A%22ly_alamo_abandon_cart%22%2C%22smt_new%22%3A%22smt_new%22%2C%22all%22%3A%22all%22%2C%22ly_treatment_group_2of2_5050split%22%3A%22ly_treatment_group_2of2_5050split%22%7D; _gat_ehiglobal=1; PathforaPageView=34; __CT_Data=gpv=33&ckp=tld&dm=alamo.com&apv_16618_www03=33&cpv_16618_www03=33&rpv_16618_www03=33; ki_t=1562830457073%3B1563004581273%3B1563010787451%3B2%3B34; RT="sl=18&ss=1563004569047&tt=93070&obo=1&sh=1563010787510%3D18%3A1%3A93070%2C1563009723158%3D17%3A1%3A88251%2C1563009672739%3D16%3A1%3A85100%2C1563009665012%3D15%3A1%3A81024%2C1563007774506%3D14%3A1%3A74219&dm=alamo.com&si=87c69565-c342-46f9-af82-b1f24510246d&bcn=%2F%2F0211c83e.akstat.io%2F&ld=1563010787511"; _4c_=XZJPj5swEMW%2Fi89psPln4NbSy0pRtyLJ2TJ4KKhgI2M2RVG%2B%2B44X1GbLxei937wHA3dy60CTgiVpRBnlWRZH7EB%2BwzqT4k5sr%2FzxRgrSqljynDdt3CRRxttccdWwmrI6hVAxSg7kj8%2FhNKVpnERRlDwOREG7B9Bnn7OMM%2Bp97N7ykZTL4D7FcJZTHiLW%2F6U%2B%2ByFjsfebaQfuZLEDcp1z01wEwe12O8pBjubYmDEALa7noJH2iwXt5BB0ZoRj58YBY796TLzouVdgZ%2FHyHWNQPoH%2B5TphWlF9zKAaolxKK8pBzrgmT5VmmYwWpVGwC8vsMNyKH8tYg93ECmawb9L1iH5bp%2Bdp7ey6lfh%2B3YAoXyt0r2fvv1biZFY5uHUb%2BGlhkvv9FTPFZZ18cQVO9v5lnpvOS%2B3M9uT%2FOZd%2F8gmkEpd%2B9CkhwZV%2BbBl%2Fihy%2FVZpE%2BYE4h2yWxtRfj8fjHQ%3D%3D; s_tps=1079; s_pvs=1012; s_sess=%20s_ppvl%3D%252Fen_US%252Fcar-rental%252Freservation%252FselectCar.html%252C21%252C58%252C2669%252C1371%252C969%252C1920%252C1080%252C1%252CL%3B%20s_ptc%3D0.01%255E%255E0.00%255E%255E0.00%255E%255E0.00%255E%255E0.00%255E%255E0.00%255E%255E4.78%255E%255E0.03%255E%255E4.82%3B%20s_ppv%3D%252Fen_US%252Fcar-rental%252Fhome.html%252C63%252C74%252C1469%252C1121%252C969%252C1920%252C1080%252C1%252CL%3B%20SC_LINKS%3D%252Fen_US%252Fcar-rental%252Fhome.html%255E%255EBook%2520Now%255E%255E%2523%255E%255Ebuttons%255E%255E%3B; s_pers=%20s_dfa%3Dehglobalprod%252Cehglobalalwebus%7C1563012585515%3B%20s_vs%3D1%7C1563012599274%3B%20gpv_v5%3D%252Fen_US%252Fcar-rental%252Fhome.html%7C1563012599289%3B%20s_visit%3D1%7C1563012599293%3B; s_sq=ehglobalprod%252Cehglobalalwebus%3D%2526c.%2526a.%2526activitymap.%2526page%253D%25252Fen_US%25252Fcar-rental%25252Fhome.html%2526link%253DBook%252520Now%2526region%253Dbuttons%2526pageIDType%253D1%2526.activitymap%2526.a%2526.c""",
+            "csrf-token": "undefined",
+            "origin": "https://www.alamo.com",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36",
+            "x-requested-with": "XMLHttpRequest"
+        }
+        formdata = {
+            "pickUpLocation.searchCriteria": "San Francisco Union Square",
+            "pickUpLocation.peopleSoftId": "1019124",
+            "returnToSameLocation": "on",
+            "dropOffLocation.searchCriteria": "San Francisco Union Square",
+            "dropOffLocation.peopleSoftId": "1019124",
+            "countryOfResidenceResident": "on",
+            "countryOfResidence": "US",
+            "pickUpDateTime.date": "07/15/19",
+            "pickUpDateTime.time": "1200",
+            "pickUpDateTime.blackOut": "", 
+            "dropOffDateTime.date": "07/17/19",
+            "dropOffDateTime.time": "1200",
+            "dropOffDateTime.blackOut": "",
+            "renterAge": "25",
+            "couponCodeList[0]": "",
+            "couponToRemove": "",
+            "customerNumber": "",
+            "productCode": "",
+            "username": "",
+            "password": "",
+            "IATA": "false",
+            "customerNumber": "",
+            "enableReservationReset": "true",
+            "homepage": "true",
+            "secureToken": "62a7a28b-9910-4687-8794-66861b21af53",
+            "secureToken2": "e4b37529-a976-4ddd-8e12-bc4ebb5044ac",
+        }
+
+        yield scrapy.FormRequest(url, formdata=formdata, callback=self.parse_detail, headers=headers, method="POST")
+
+
+    def parse_detail(self, response):
+
+        url = "https://www.alamo.com/content/data/apis/live/reservation/vehicleList.sfx.json/channelName%3Dalamo/locale%3Den_US.json"
+
+        headers = {
+            "accept": "application/json, text/javascript, */*; q=0.01",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            # "cookie": """ORIGIN=ptc; akacd_www_alamo_com_PC=3740283238~rv=33~id=fb83c74ffff546edcc591c8373ff1a84; Akamai-Edgescape=georegion=39,country_code=KH,region_code=,city=PHNOMPENH,dma=,pmsa=,msa=,areacode=,county=,fips=,lat=11.55,long=104.92,timezone=GMT+7,zip=,continent=AS,throughput=vhigh,bw=5000,asnum=38901; check=true; Rental-alamo_com=!7wqfXwoFoK2Usk+obXePO4Msbo9tExn89fgBHG4wH4BKD6qUaxxkb5NW4t08oyIv1quFz2bGI041ZQ==; TLTSID=3E4C90CFDD63FF5DCE1DB6872F611BF8; TLTUID=71449B9059575CF5AEBA267FB2414170; geo=KH; AMCVS_30545A0C536B768C0A490D44%40AdobeOrg=1; loc=US%7Cen_US%7C%7C; _sdsat_FUNNEL_START=HOME; s_cc=true; _gcl_au=1.1.204630551.1562830451; notice_behavior=none; _ga=GA1.2.800946818.1562830451; seerid=120285.73332530419; seerid=120285.73332530419; ki_r=; _CT_RS_=Recording; WRUIDAWS20170419=2338980782129529; _fbp=fb.1.1562830461218.915130958; _resDrop=SFOC78; AMCV_30545A0C536B768C0A490D44%40AdobeOrg=-330454231%7CMCIDTS%7C18091%7CMCMID%7C90411171841614233213393773031316547261%7CMCAAMLH-1563609379%7C6%7CMCAAMB-1563609379%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1563011779s%7CNONE%7CMCAID%7CNONE%7CvVersion%7C3.1.2; _gid=GA1.2.500318964.1563004583; _pickUpDate=2019-07-15 12:00:00; _dropOffDate=2019-07-17 12:00:00; res=1019124%7CSan+Francisco+Union+Square%7C1563217200000%7CAmerica%2FLos_Angeles%7C1019124%7CSan+Francisco+Union+Square%7C1563390000000%7CAmerica%2FLos_Angeles%7CUS%7C%7C%7C25%7C; seerses=e; seerses=e; mboxEdgeCluster=28; JSESSIONID=nr3hncc50d4ecbplol0rswv9; ly_segs=%7B%22alamo_abandon_cart_onsite_modals%22%3A%22alamo_abandon_cart_onsite_modals%22%2C%22treatment_group%22%3A%22treatment_group%22%2C%22ly_alamo_abandon_cart%22%3A%22ly_alamo_abandon_cart%22%2C%22smt_new%22%3A%22smt_new%22%2C%22all%22%3A%22all%22%2C%22ly_treatment_group_2of2_5050split%22%3A%22ly_treatment_group_2of2_5050split%22%7D; PathforaPageView=32; __CT_Data=gpv=31&ckp=tld&dm=alamo.com&apv_16618_www03=31&cpv_16618_www03=31&rpv_16618_www03=31; ki_t=1562830457073%3B1563004581273%3B1563009672671%3B2%3B32; s_sq=%5B%5BB%5D%5D; s_sess=%20SC_LINKS%3D%3B%20s_ppvl%3D%252Fen_US%252Fcar-rental%252Fhome.html%252C91%252C81%252C1569%252C1325%252C969%252C1920%252C1080%252C1%252CL%3B%20s_ptc%3D%3B%20s_ppv%3D%252Fen_US%252Fcar-rental%252Freservation%252FselectCar.html%252C23%252C23%252C969%252C999%252C969%252C1920%252C1080%252C1%252CL%3B; s_tps=48; s_pvs=40; _4c_=VVJPb6QgFP8unN0R1JHR2657aTLZbuz0TBCeqymCAeysmcx3L46mtVzA39%2BXF2%2Fo2oFGJTnmKcYFJUVB0wi9wexQeUO2l8v1jkrUyozTgoo2E8f0RNtCUilIg0mTQyIJRhH6v%2BRQnOM8O6ZperxHSEK7BeA9T8mJErzwoXvND0o%2BKf8tJoyDaRJk%2FafqO58Qki28GDfBDU1WBV3n%2FejKOL5erweu%2BGAOwgwxaPb6Egtuf1jQnqvYggP7zn1vdOxAgfAVt4fODyr0%2FFx87Em7XoJ17Ol3yA3wGfQ%2F3zHTsvoRsqLBxyrFXVjb49NMo9GsMhI2YHLeDGDZn2lowK5g%2FVXPfs3j3q29ndeOpV4LYNVzvbHPNTubmSs%2Fr8BfCyPf3q8hkV3mcavdN7xMjTefA%2B%2BZyxd8Bi7ZpR8e%2FrDZx7LDv1HkmOIiTSLkfZCe8gwv536%2FfwA%3D; RT="sl=16&ss=1563004569047&tt=85100&obo=1&sh=1563009672739%3D16%3A1%3A85100%2C1563009665012%3D15%3A1%3A81024%2C1563007774506%3D14%3A1%3A74219%2C1563007763832%3D13%3A1%3A71370%2C1563007511287%3D12%3A1%3A67376&dm=alamo.com&si=87c69565-c342-46f9-af82-b1f24510246d&bcn=%2F%2F0211c83e.akstat.io%2F"; mbox=PC#c59d3f519bd44d9c83955102e7b26060.28_35#1626254461|session#9785c6b6dbb440519b7727002f3d606f#1563011581; s_pers=%20s_vs%3D1%7C1563011473049%3B%20gpv_v5%3D%252Fen_US%252Fcar-rental%252Freservation%252FselectCar.html%7C1563011473057%3B%20s_visit%3D1%7C1563011473060%3B%20s_dfa%3Dehglobalprod%252Cehglobalalwebus%7C1563011521018%3B""",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36",
+            "x-requested-with": "XMLHttpRequest"
+        }
+            # referer: https://www.alamo.com/en_US/car-rental/reservation/selectCar.html
+        yield scrapy.Request(url=url, callback=self.parse_first, headers=headers, method="GET")
+
+    def print_date(self):
+        print('-----------------------------------------------------------------')
+    def parse_first(self, response):
+        # data = json.loads(response.body)['analytics']['carClassesDisplayed']
+        # pdb.set_trace()
+        # for car in data:
+            # if 'name' in car:
+        self.print_date()
+        data = json.loads(response.body)['vehicleSummary']['vehicleDetail']
+        for car in data:
+            if 'name' in car:
+                item = AlamoItem()
+    #              pickupDate = scrapy.Field()
+    # returnDate = scrapy.Field()
+    # carClass = scrapy.Field()
+    # carType = scrapy.Field()
+    # dailyPrice = scrapy.Field()
+    # totalPrice = scrapy.Field()
+                item['carClass'] = car['name']
+                item['carType'] = car['similarVehicles']
+                item['dailyPrice'] = car['vehicleRate']['highestUsedPayLaterRate']
+                item['totalPrice'] = car['vehicleRate']['totalPrice']
+                yield item
+
