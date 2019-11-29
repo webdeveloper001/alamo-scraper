@@ -1,0 +1,30 @@
+pickupDate,returnDate,period,carClass,carType,dailyPrice,totalPrice
+07/25/19,07/26/19,1,Economy,Mitsubishi Mirage,75.98,83.74
+07/25/19,07/26/19,1,Compact,Nissan Versa,77.89,85.81
+07/25/19,07/26/19,1,Midsize,Hyundai Elantra,79.79,87.97
+07/25/19,07/26/19,1,Standard,VW Jetta,81.69,90.02
+07/25/19,07/26/19,1,Fullsize,Ford Fusion,83.59,92.35
+07/25/19,07/26/19,1,Premium,Nissan Maxima,85.68,95.11
+07/25/19,07/26/19,1,Luxury,Cadillac XTS,98.73,109.67
+07/25/19,07/26/19,1,Premium Special,Chrysler 300,104.49,115.52
+07/25/19,07/26/19,1,Midsize SUV,Toyota RAV4,111.60,122.87
+07/25/19,07/26/19,1,Standard SUV,Ford Edge,122.51,135.66
+07/25/19,07/26/19,1,Midsize Convertible,Mini Cooper Convertible,128.25,141.89
+07/25/19,07/26/19,1,Drive Happy Deal,Vehicle determined upon pick-up (Compact or Larger),144.00,157.99
+07/25/19,07/26/19,1,Compact SUV,Ford Eco Sport,219.99,240.47
+07/25/19,07/26/19,1,Sporty,Dodge Challenger,250.00,273.40
+07/26/19,07/27/19,1,Midsize SUV,Toyota RAV4,95.81,105.73
+07/26/19,07/27/19,1,Economy,Mitsubishi Mirage,99.06,108.78
+07/26/19,07/27/19,1,Compact,Nissan Versa,99.84,109.63
+07/26/19,07/27/19,1,Midsize,Hyundai Elantra,100.48,110.42
+07/26/19,07/27/19,1,Standard,VW Jetta,101.23,111.22
+07/26/19,07/27/19,1,Fullsize,Ford Fusion,101.68,111.97
+07/26/19,07/27/19,1,Premium,Nissan Maxima,103.51,114.46
+07/26/19,07/27/19,1,Premium Special,Chrysler 300,104.49,115.52
+07/26/19,07/27/19,1,Luxury,Cadillac XTS,113.02,125.18
+07/26/19,07/27/19,1,Standard SUV,Ford Edge,122.51,135.66
+07/26/19,07/27/19,1,Midsize Convertible,Mini Cooper Convertible,128.25,141.89
+07/26/19,07/27/19,1,Convertible,Ford Mustang Convertible,133.00,147.05
+07/26/19,07/27/19,1,Drive Happy Deal,Vehicle determined upon pick-up (Compact or Larger),144.00,157.99
+07/26/19,07/27/19,1,Compact SUV,Ford Eco Sport,219.99,240.47
+07/26/19,07/27/19,1,Sporty,Dodge Challenger,250.00,273.40
